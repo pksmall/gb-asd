@@ -288,3 +288,5 @@ __pycache__/
 *.xsd.cs
 /hw01/hw01/hw01.vcxproj
 /hw01/hw01/hw01.vcxproj.filters
+/hw02/hw02/hw02.vcxproj.filters
+/hw02/hw02/hw02.vcxproj
