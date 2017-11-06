@@ -286,3 +286,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/hw01/hw01/hw01.vcxproj
+/hw01/hw01/hw01.vcxproj.filters
