@@ -11,6 +11,7 @@
 #include "queue.h"
 #include "stack.h"
 #include "bitree.h"
+#include "dbTree.h"
 
 /**
  * 1. Реализовать простейшую хэш-функцию. На вход функции подается строка,
@@ -42,20 +43,20 @@ unsigned int task01(char *str, int len)
  */
 int task02(int argc, char **argv)
 {
-	biNode *tree1 = create_biNode(1);
-	biNode *tmp;
+	biNode *tree1 = NULL;
 	char *filename = "";
 	int sortSwitch = 1;
+	int value;
 	int idx=0;
 
-	for (int i = 0; i < argc; i++) {
-		// Выводим список аргументов в цикле
-		printf("%d %d -> %s\n", argc, i, argv[i]);
-	}
+//	for (int i = 0; i < argc; i++) {
+//		// Выводим список аргументов в цикле
+//		printf("%d %d -> %s\n", argc, i, argv[i]);
+//	}
 
 	if (argc <= 1 || !strcmp(argv[1], "--help")) {
 		printf("%s --help or\n%s --file filename --travers [1..7]\n", argv[0], argv[0]);
-		printf("\t filename - file contants number fo bitree (ex. 123456789)\n");
+		printf("\t filename - the file must contain int numbers. One number is one line.\n");
 		printf("\t default travers: 1 - pre order\n");
 		printf("\t travers: 2 - post order\n");
 		printf("\t travers: 3 - in order\n");
@@ -114,13 +115,39 @@ int task02(int argc, char **argv)
 
 	printf("file name: %s\tsortSwitch: %d\n\n", filename, sortSwitch);
 
-	tmp = create_biNode(2);
-	tree1->left = tmp;
-	tmp = create_biNode(3);
-	tree1->right = tmp;
+//	char buff[66];
+//	if (getcwd(buff, sizeof(buff)) == NULL) {
+		//perror("getcwd got NULL.\n");
+	//}
+	 //else {
+//		printf("%s\n", buff);
+	 //}
 
-	tmp = create_biNode(4);
-	tree1->right->left = tmp;
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("Can't open file.\n");
+		exit(-1);
+	}
+
+	int tmp=0;
+	while (!feof(file)) {
+		fscanf(file, "%d", &value);
+		if (tmp != value) {
+			insertBiNode(&tree1, value);
+		}
+		tmp = value;
+		//printf("= %d == %d\n", value, tmp);
+	}
+	fclose(file);
+
+//	biNode *tmp;
+//  tree1 = create_biNode(1);
+//	tmp = create_biNode(2);
+//	tree1->left = tmp;
+//	tmp = create_biNode(3);
+//	tree1->right = tmp;
+//	tmp = create_biNode(4);
+//	tree1->right->left = tmp;
 
 	print_tree(tree1);
 
@@ -159,7 +186,11 @@ int task02(int argc, char **argv)
 		break;
 
 	}
-	printf("\n\n");
+	printf("\nSearch 8\n");
+
+	biNode *sBiNode = getBiNodeByValue(tree1, 8);
+	print_tree(sBiNode);
+	printf("\n");
 
 	//biNode *tree2 = Tree(strlen(a));
 	//print_tree(tree2);
@@ -175,6 +206,21 @@ int task02(int argc, char **argv)
 */
 void task03() 
 {
+	dbNode *stdDb = create_dbNode("Smith", 25, 787123923);
+	//input date
+	insertDbNode(&stdDb, "Jonh", 21, 123456789);
+	insertDbNode(&stdDb, "Mary", 51, 487872438);
+	insertDbNode(&stdDb, "Zoe", 41, 256934856);
+
+	printDb(stdDb);
+	printf("\n");
+
+	printf("Search by Name:\t");
+	getDbNodeByName(stdDb, "Mary");
+
+	printf("Search by Age:\t");
+	getDbNodeByAge(stdDb, 41);
+	printf("\n");
 
 }
 
@@ -187,5 +233,8 @@ int main(int argc, char **argv)
 
 	task02(argc, argv);
 
+	printf("\n");
+
+	task03();
 	return 0;
 }

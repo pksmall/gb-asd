@@ -48,7 +48,7 @@ void print_tree(biNode *root)
 void preorder_travers(biNode *root) 
 {
 	if (root) {
-		printf("%d", root->data);
+		printf("%d ", root->data);
 
 		preorder_travers(root->left);
 		preorder_travers(root->right);
@@ -62,7 +62,7 @@ void postorder_travers(biNode *root)
 		preorder_travers(root->left);
 		preorder_travers(root->right);
 
-		printf("%d", root->data);
+		printf("%d ", root->data);
 	}
 }
 
@@ -73,7 +73,7 @@ void inorder_travers(biNode *root)
 	if (root) {
 		inorder_travers(root->left);
 		
-		printf("%d", root->data);
+		printf("%d ", root->data);
 		
 		inorder_travers(root->right);
 
@@ -88,7 +88,7 @@ void iterpreorder_travers(biNode *root)
 	Stack *ps = createStack();
 	while (ps->size != 0 || root != NULL) {
 		if (root != NULL) {
-			printf("%d", root->data);
+			printf("%d ", root->data);
 			if (root->right) {
 				pushStack(ps, root->right);
 			}
@@ -113,7 +113,7 @@ void iterinorder_travers(biNode *root)
 		}
 		else {
 			root = popStack(ps);
-			printf("%d", root->data);
+			printf("%d ", root->data);
 			root = root->right;
 		}
 	}
@@ -140,7 +140,7 @@ void iterpostorder_travers(biNode *root)
 			}
 			else {
 				popStack(ps);
-				printf("%d", peekn->data);
+				printf("%d ", peekn->data);
 				lnp = peekn;
 			}
 		}
@@ -158,7 +158,7 @@ void width_travers(biNode *root)
 	pushFront(q, root);
 	while (q->size != 0) {
 		biNode *tmp = (biNode*) popFront(q);
-		printf("%d", tmp->data);
+		printf("%d ", tmp->data);
 		if (tmp->left) {
 			pushFront(q, tmp->left);
 		}
@@ -176,6 +176,73 @@ void deleteTree(biNode **root)
 		deleteTree(&((*root)->right));
 		free(*root);
 	}
+}
+
+biNode* getFreeBiNode(int value, biNode *parent)
+{
+	biNode* tmp = (biNode*)malloc(sizeof(biNode));
+	tmp->left = tmp->right = NULL;
+	tmp->data = value;
+	tmp->parent = parent;
+	return tmp;
+}
+
+void insertBiNode(biNode **head, int value)
+{
+	biNode *tmp;
+
+	if (*head == NULL) {
+		*head = getFreeBiNode(value, NULL);
+		return;
+	}
+
+	tmp = *head;
+	while (tmp) {
+		//printf("%d -- %d\n", value, tmp->data);
+		if (value > tmp->data ) {
+			if (tmp->right) {
+				tmp = tmp->right;
+				continue;
+			}
+			else {
+				tmp->right = getFreeBiNode(value, tmp);
+				return;
+			}
+		}
+		else if (value < tmp->data) {
+			if (tmp->left) {
+				tmp = tmp->left;
+				continue;
+			}
+			else {
+				tmp->left = getFreeBiNode(value, tmp);
+				return;
+			}
+		}
+		else {
+			printf("Wrong biNode.\n");
+			exit(-2);
+		}
+	}
+}
+
+// search
+biNode *getBiNodeByValue(biNode *root, int value) 
+{
+	while (root) {
+		if (root->data > value ) {
+			root = root->left;
+			continue;
+		}
+		else if (root->data < value) {
+			root = root->right;
+			continue;
+		}
+		else {
+			return root;
+		}
+	}
+	return NULL;
 }
 
 char *a = "12345678";

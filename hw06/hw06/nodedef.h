@@ -23,3 +23,15 @@ typedef struct _queLinkedList {
 	qNode *head;
 	qNode *tail;
 } queLinkedList;
+
+// db biTree
+typedef struct _dbNode {
+	int idHash;
+	char *name;
+	int hashName;
+	int age;
+	int tabid;
+	struct _dbNode *left;
+	struct _dbNode *right;
+	struct _dbNode *parent;
+} dbNode;
