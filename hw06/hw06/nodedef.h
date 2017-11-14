@@ -2,19 +2,19 @@
 
 #define STACK_INIT_SIZE 100
 
-// stack
-typedef struct Node {
+// bitree
+typedef struct _bNode {
 	int data;
-	struct Node *left;
-	struct Node *right;
-	struct Node *parent;
-} Node;
+	struct _bNode *left;
+	struct _bNode *right;
+	struct _bNode *parent;
+} biNode;
 
 // queue node
-typedef struct _Node {
+typedef struct _qNode {
 	void *value;
-	struct _Node *next;
-	struct _Node *prev;
+	struct _qNode *next;
+	struct _qNode *prev;
 } qNode;
 
 // queue

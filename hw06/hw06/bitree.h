@@ -7,9 +7,9 @@
 #include "nodedef.h"
 #include "stack.h"
 
-Node *create_node(int val) 
+biNode *create_biNode(int val) 
 {
-	Node *tree = (Node *)malloc(sizeof(Node));
+	biNode *tree = (biNode *)malloc(sizeof(biNode));
 	tree->parent = NULL;
 	tree->left = NULL;
 	tree->right = NULL;
@@ -19,7 +19,7 @@ Node *create_node(int val)
 	return tree;
 }
 
-void print_tree(Node *root) 
+void print_tree(biNode *root) 
 {
 	if (root) {
 		printf("%d", root->data);
@@ -45,7 +45,7 @@ void print_tree(Node *root)
 	}
 }
 
-void preorder_travers(Node *root) 
+void preorder_travers(biNode *root) 
 {
 	if (root) {
 		printf("%d", root->data);
@@ -56,7 +56,7 @@ void preorder_travers(Node *root)
 	}
 }
 
-void postorder_travers(Node *root) 
+void postorder_travers(biNode *root) 
 {
 	if (root) {
 		preorder_travers(root->left);
@@ -68,7 +68,7 @@ void postorder_travers(Node *root)
 
 // inorder travers 
 // обход симетрически
-void inorder_travers(Node *root) 
+void inorder_travers(biNode *root) 
 {
 	if (root) {
 		inorder_travers(root->left);
@@ -81,34 +81,38 @@ void inorder_travers(Node *root)
 }
 
 // Итеративная реализация обхода в глубину требует использования стека.
-void iterpreorder_travers(Node *root) 
+// inter preorder
+// Прямой обход
+void iterpreorder_travers(biNode *root) 
 {
 	Stack *ps = createStack();
 	while (ps->size != 0 || root != NULL) {
 		if (root != NULL) {
 			printf("%d", root->data);
 			if (root->right) {
-				push(ps, root->right);
+				pushStack(ps, root->right);
 			}
 			root = root->left;
 		}
 		else {
-			root = pop(ps);
+			root = popStack(ps);
 		}
 	}
 	freeStack(&ps);
 }
 
-void iternnorder_travers(Node *root) 
+// inter in order
+// Поперечный обход
+void iterinorder_travers(biNode *root) 
 {
 	Stack *ps = createStack();
 	while (ps->size != 0 || root != NULL) {
 		if (root != NULL) {
-			push(ps, root);
+			pushStack(ps, root);
 			root = root->left;
 		}
 		else {
-			root = pop(ps);
+			root = popStack(ps);
 			printf("%d", root->data);
 			root = root->right;
 		}
@@ -116,57 +120,75 @@ void iternnorder_travers(Node *root)
 	freeStack(&ps);
 }
 
-void iterpostorder_travers(Node *root) 
+// inter post order
+// Обратный обход
+void iterpostorder_travers(biNode *root) 
 {
 	Stack *ps = createStack();
-	Node *lnp = NULL;
-	Node *peekn = NULL;
+	biNode *lnp = NULL;
+	biNode *peekn = NULL;
 
 	while (!ps->size == 0 || root != NULL) {
 		if (root) {
-			push(ps, root);
+			pushStack(ps, root);
 			root = root->left;
 		}
 		else {
-			peekn = peek(ps);
+			peekn = peekStack(ps);
 			if (peekn->right && lnp != peekn->right) {
 				root = peekn->right;
 			}
 			else {
-				pop(ps);
+				popStack(ps);
 				printf("%d", peekn->data);
 				lnp = peekn;
 			}
 		}
 	}
-
 	freeStack(&ps);
 }
 
 // width travers
 // обход в ширину
-void width_travers(Node *root) 
+// сначала мы посещаем корень, затем, слева направо, все ветви первого уровня, 
+// затем все ветви второго уровня и т.д.
+void width_travers(biNode *root) 
 {
-	if (root) {
-		width_travers(root->left);
+	queLinkedList *q = createQueLinkedList();
+	pushFront(q, root);
+	while (q->size != 0) {
+		biNode *tmp = (biNode*) popFront(q);
+		printf("%d", tmp->data);
+		if (tmp->left) {
+			pushFront(q, tmp->left);
+		}
+		if (tmp->right) {
+			pushFront(q, tmp->right);
+		}
+	}
+	deleteQueLinkedList(&q);
+}
 
-		printf("%d", root->data);
-
-		width_travers(root->right);
+void deleteTree(biNode **root) 
+{
+	if (*root) {
+		deleteTree(&((*root)->left));
+		deleteTree(&((*root)->right));
+		free(*root);
 	}
 }
 
 char *a = "12345678";
 
-Node *Tree(int n) 
+biNode *Tree(int n) 
 {
-	Node *newNode;
+	biNode *newbiNode;
 
 	int x, nl, nr;
 
 
 	if (n == 0) {
-		newNode = NULL;
+		newbiNode = NULL;
 	}
 	else {
 		// scanf()
@@ -176,11 +198,11 @@ Node *Tree(int n)
 		nl = n / 2;
 		nr = n - nl - 1;
 
-		newNode = (Node *)malloc(sizeof(Node));
-		newNode->data = x;
-		newNode->left = Tree(nl);
-		newNode->right = Tree(nr);
+		newbiNode = (biNode *)malloc(sizeof(biNode));
+		newbiNode->data = x;
+		newbiNode->left = Tree(nl);
+		newbiNode->right = Tree(nr);
 	}
 
-	return newNode;
+	return newbiNode;
 }

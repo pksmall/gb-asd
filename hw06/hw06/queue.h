@@ -228,7 +228,7 @@ void printQueLinkedList(queLinkedList *list, void(*fun)(void*)) {
 
 // печать занчения Int
 void printInt(void *value) {
-	printf("%d ", *((int*)value));
+	printf("%d", *((int*)value));
 }
 
 // список из массива
@@ -236,7 +236,7 @@ queLinkedList* fromArray(void *arr, size_t n, size_t size) {
 	queLinkedList *tmp = NULL;
 	size_t i = 0;
 	if (arr == NULL) {
-		exit(7);
+		exit(-7);
 	}
 
 	tmp = createQueLinkedList();

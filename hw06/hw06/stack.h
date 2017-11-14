@@ -1,37 +1,43 @@
 #pragma once
 #include <stdlib.h>
+#include <memory.h>
 #include <malloc.h>
 #include "nodedef.h"
 
+// stack for biNode
 typedef struct Stack {
 	size_t size;
 	size_t limit;
-	Node **data;
+	void **data;
 } Stack;
 
-Stack* createStack() {
+Stack* createStack() 
+{
 	Stack *tmp = (Stack*)malloc(sizeof(Stack));
 	tmp->limit = STACK_INIT_SIZE;
 	tmp->size = 0;
-	tmp->data = (Node**)malloc(tmp->limit * sizeof(Node*));
+	tmp->data = (biNode**)malloc(tmp->limit * sizeof(biNode*));
 	return tmp;
 }
 
-void freeStack(Stack **s) {
+void freeStack(Stack **s) 
+{
 	free((*s)->data);
 	free(*s);
 	*s = NULL;
 }
 
-void push(Stack *s, Node *item) {
+void pushStack(Stack *s, void *item) 
+{
 	if (s->size >= s->limit) {
 		s->limit *= 2;
-		s->data = (Node**)realloc(s->data, s->limit * sizeof(Node*));
+		s->data = (biNode**) realloc(s->data, s->limit * sizeof(biNode*));
 	}
 	s->data[s->size++] = item;
 }
 
-Node* pop(Stack *s) {
+biNode* popStack(Stack *s) 
+{
 	if (s->size == 0) {
 		exit(-7);
 	}
@@ -39,6 +45,7 @@ Node* pop(Stack *s) {
 	return s->data[s->size];
 }
 
-Node* peek(Stack *s) {
+biNode* peekStack(Stack *s) 
+{
 	return s->data[s->size - 1];
 }
