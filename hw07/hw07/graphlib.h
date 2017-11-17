@@ -1,7 +1,7 @@
 #pragma once
 // graphs lib
 //
-// @version 0.1 2017/11/16
+// @version 0.3 2017/11/17
 // 
 
 #include <stdbool.h>
@@ -88,7 +88,7 @@ void _deepStepGraph(int x, int start, int** arr, bool *visited)
 
 	visited[start] = true;
 
-	for (int r = 0; r <= x; r++) {
+	for (int r = 0; r < x; r++) {
 		if ((arr[start][r] != 0) && (!visited[r])) {
 			_deepStepGraph(x, r, arr, visited);
 		}
