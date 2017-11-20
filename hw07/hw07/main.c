@@ -63,7 +63,7 @@ void task03()
 
 int main()
 {
-	//task01();
+	task01();
 
 	printf("\n");
 
@@ -71,7 +71,7 @@ int main()
 
 	printf("\n");
 
-	//task03();
+	task03();
 
 	return 0;
 }
