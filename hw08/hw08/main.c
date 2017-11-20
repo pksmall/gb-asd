@@ -16,7 +16,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "utils.h"
-#define SIZE	1000000
+#define SIZE	100
 
 /*
  * 1. Реализовать сортировку подсчетом.
@@ -92,30 +92,38 @@ void task02(int* arr, int n)
 /*
  * 3. *Реализовать сортировку слиянием.
  */
-void task03(int* arr, int l, int n)
+void task03(int* arr, int l, int n, int size)
 {
-	if (l == n) return; 
-	int mid = (l + n) / 2;
+	if (n <= l) return; 
+	int mid = l + (n - l) / 2;
 
-	task03(arr, l, mid);
-	task03(arr, mid + 1, n);
+	task03(arr, l, mid,size);
+	task03(arr, mid + 1, n,size);
 
 	int i = l;  
 	int j = mid + 1; 
 	int *tmp = (int*)malloc(n * sizeof(int));
 
-	for (int step = 0; step < n - l + 1; step++) {
-		if ((j > n) || ((i <= mid) && (arr[i] < arr[j]))) {
-			tmp[step] = arr[i];
-			i++;
+	memcpy(tmp, arr, sizeof(int) * size);
+
+	for (int k = l; k <= n; k++) {
+		tmp[k] = arr[k];
+	}
+
+	for (int k = l; k <= n; k++) {
+		if (i > mid) {
+			arr[k] = tmp[j];
+		}
+		else if (j > n) {
+			arr[k] = tmp[i];
+		}
+		else if (tmp[j] < tmp[i]) {
+			arr[k] = tmp[j];
 		}
 		else {
-			tmp[step] = arr[j];
-			j++;
+			arr[k] = tmp[i];
+			i++;
 		}
-	}
-	for (int step = 0; step < n - l + 1; step++) {
-		arr[l + step] = tmp[step];
 	}
 }
 
@@ -168,8 +176,7 @@ int main()
 
 	//printarray(arr, SIZE);
 	double start = clock();
-	sortArr = task01(arr, SIZE);
-	time_t t02 = time(0);
+	//sortArr = task01(arr, SIZE);
 	printf("Count Sort = %.8lf\n", (clock() - start) / CLOCKS_PER_SEC);
 	//printarray(sortArr, SIZE);
 
@@ -177,17 +184,17 @@ int main()
 
 	//printarray(arr, SIZE);
 	start = clock();
-	task02(arr, SIZE);
+	//task02(arr, SIZE);
 	printf("QSort = %.8lf\n", (clock() - start) / CLOCKS_PER_SEC);
 	//printarray(arr, SIZE);
 
 	printf("\n");
 
-	//printarray(arr1, SIZE);
+	printarray(arr1, SIZE);
 	start = clock();
-	task03(arr1, 0, SIZE - 1);
-	//printarray(arr1, SIZE);
+	task03(arr1, 0, SIZE - 1, SIZE);
 	printf("MergeSort = %.8lf\n", (clock() - start) / CLOCKS_PER_SEC);
+	printarray(arr1, SIZE);
 
 	printf("\n");
 
